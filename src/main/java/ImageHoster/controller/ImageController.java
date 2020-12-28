@@ -88,7 +88,6 @@ public class ImageController {
         imageService.uploadImage(newImage);
         return "redirect:/images";
     }
-
     //This controller method is called when the request pattern is of type 'editImage'
     //This method fetches the image with the corresponding id from the database and adds it to the model with the key as 'image'
     //The method then returns 'images/edit.html' file wherein you fill all the updated details of the image
@@ -162,9 +161,25 @@ public class ImageController {
     //The method calls the deleteImage() method in the business logic passing the id of the image to be deleted
     //Looks for a controller method with request mapping of type '/images'
     @RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
-    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId) {
-        imageService.deleteImage(imageId);
-        return "redirect:/images";
+    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId,HttpSession session,Model model) {
+        Image img= imageService.getImageById(imageId);
+        User imageOwner=img.getUser();
+        User currentUser=(User)session.getAttribute("loggeduser");
+        if(imageOwner.getUsername().equals((String)currentUser.getUsername())){
+            imageService.deleteImage(imageId);
+            return "redirect:/images";
+        }
+        else{
+
+            Image image = imageService.getImage(imageId);
+            String tags = convertTagsToString(image.getTags());
+            model.addAttribute("image", image);
+            model.addAttribute("tags", tags);
+            String error = "Only the owner of the image can delete the image";
+            model.addAttribute("deleteError", error);
+            return "images/image";
+        }
+
     }
 
 

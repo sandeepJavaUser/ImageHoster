@@ -1,4 +1,3 @@
-/*
 package ImageHoster.controller;
 
 import ImageHoster.model.User;
@@ -79,7 +78,7 @@ public class UserControllerTest {
         user.setProfile(userProfile);
         user.setId(1);
         user.setUsername("Abhi");
-        user.setPassword("password1@");
+        user.setPassword("password");
 
 
         this.mockMvc.perform(post("/users/registration")
@@ -103,7 +102,7 @@ public class UserControllerTest {
     public void signinWithWrongCredentials() throws Exception {
         User userSignin = new User();
         userSignin.setUsername("Abhi");
-        userSignin.setPassword("password1@");
+        userSignin.setPassword("password");
 
         Mockito.when(userService.login(Mockito.anyObject())).thenReturn(null);
         session = new MockHttpSession();
@@ -132,7 +131,7 @@ public class UserControllerTest {
 
         User userSignin = new User();
         userSignin.setUsername("Abhi");
-        userSignin.setPassword("password1@");
+        userSignin.setPassword("password");
 
         Mockito.when(userService.login(Mockito.anyObject())).thenReturn(user);
         session = new MockHttpSession();
@@ -167,4 +166,3 @@ public class UserControllerTest {
                 .andExpect(content().string(containsString("Image Hoster")));
     }
 }
-*/
